@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in Business Portfolio — Keene Kolbeinsen-Tafaoa · MIS 432</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ─── TOKENS ─── */
+  :root {
+    --black:        #0e0e0d;
+    --off-black:    #1a1a18;
+    --magenta:      #e8197d;
+    --magenta-dark: #c0146a;
+    --magenta-dim:  rgba(232,25,125,0.10);
+    --magenta-glow: rgba(232,25,125,0.22);
+    --off-white:    #f6f4f1;
+    --white:        #ffffff;
+    --border:       #e0ddd8;
+    --text:         #3a3a38;
+    --text-light:   #7a7a76;
+    --text-dark:    #1a1a18;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    background: var(--black);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-brand {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .nav-brand span { color: var(--magenta); }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+  }
+
+  .nav-links a {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--magenta); }
+
+  /* ─── HERO ─── */
+  header {
+    background: var(--black);
+    padding: 80px 40px 72px;
+    border-bottom: 5px solid var(--magenta);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Magenta grid overlay */
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232,25,125,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,25,125,0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  /* Radial fade so grid fades to black at center */
+  header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 50% 50%, transparent 40%, var(--black) 100%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-kicker {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--magenta);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-kicker::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 2px;
+    background: var(--magenta);
+  }
+
+  h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    line-height: 1.08;
+    margin-bottom: 16px;
+  }
+
+  h1 .accent { color: var(--magenta); }
+
+  .hero-subtitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .hero-divider {
+    width: 48px;
+    height: 3px;
+    background: var(--magenta);
+    margin-bottom: 28px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .hero-stat-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--magenta);
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ─── SECTION WRAPPER ─── */
+  .section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 64px 40px;
+  }
+
+  .section-header {
+    margin-bottom: 40px;
+  }
+
+  .section-kicker {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--magenta);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .section-kicker::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--magenta);
+  }
+
+  h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-dark);
+    line-height: 1.15;
+  }
+
+  /* ─── ABOUT ─── */
+  .about-section {
+    background: var(--white);
+    border-top: 4px solid var(--magenta);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .about-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--text);
+    margin-bottom: 16px;
+    font-size: 15.5px;
+  }
+
+  .about-text p:last-child { margin-bottom: 0; }
+
+  .about-sidebar {
+    background: var(--off-white);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--magenta);
+    padding: 24px 26px;
+  }
+
+  .sidebar-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--magenta);
+    margin-bottom: 16px;
+  }
+
+  .sidebar-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sidebar-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .sidebar-list li::before {
+    content: '→';
+    color: var(--magenta);
+    font-family: 'Oswald', sans-serif;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── GRID ─── */
+  .labs-section { background: var(--off-white); }
+
+  .labs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  /* ─── CARD ─── */
+  .lab-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--magenta);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.45s, transform 0.45s, box-shadow 0.2s;
+  }
+
+  .lab-card.visible { opacity: 1; transform: none; }
+
+  .lab-card:hover {
+    box-shadow: 0 0 0 2px var(--magenta), 0 8px 32px rgba(0,0,0,0.12);
+  }
+
+  .card-body {
+    padding: 26px 28px 22px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-chapter {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--magenta);
+    margin-bottom: 10px;
+  }
+
+  .card-company {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .card-emoji {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text-dark);
+    line-height: 1.2;
+  }
+
+  .card-subtitle {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-light);
+    margin-bottom: 14px;
+  }
+
+  .card-desc {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 18px;
+    flex: 1;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 22px;
+  }
+
+  .tag {
+    font-family: 'Oswald', sans-serif;
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--magenta-dim);
+    color: var(--magenta-dark);
+    border: 1px solid rgba(192,20,106,0.22);
+    padding: 3px 10px;
+  }
+
+  .card-footer {
+    border-top: 1px solid var(--border);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .card-link {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--magenta);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s, color 0.2s;
+  }
+
+  .card-link:hover { color: var(--magenta-dark); gap: 10px; }
+
+  .card-link .arrow {
+    font-size: 14px;
+    transition: transform 0.2s;
+  }
+
+  .card-link:hover .arrow { transform: translateX(3px); }
+
+  /* ─── DIVIDER SECTION ─── */
+  .divider-full {
+    background: var(--off-black);
+    padding: 0;
+  }
+
+  .ai-factory {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 52px 40px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 14px;
+  }
+
+  .factory-step {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .factory-node {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(232,25,125,0.3);
+    padding: 10px 18px;
+    text-align: center;
+  }
+
+  .factory-node .f-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 3px;
+  }
+
+  .factory-node .f-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .factory-arrow {
+    color: var(--magenta);
+    font-size: 16px;
+    padding: 0 10px;
+    opacity: 0.7;
+  }
+
+  /* ─── TAKEAWAYS ─── */
+  .takeaways-section {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .takeaways-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .takeaway-item {
+    background: var(--white);
+    padding: 30px 32px;
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+  }
+
+  .takeaway-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--magenta);
+    opacity: 0.25;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 44px;
+  }
+
+  .takeaway-content h4 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+  }
+
+  .takeaway-content p {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.55;
+  }
+
+  /* ─── SKILLS STRIP ─── */
+  .skills-strip {
+    background: var(--off-white);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 40px;
+  }
+
+  .skills-strip-inner {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .skills-strip .section-kicker { margin-bottom: 20px; }
+
+  .skills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .skill-tag {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--white);
+    color: var(--text-dark);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .skill-tag:hover { border-color: var(--magenta); color: var(--magenta); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--black);
+    border-top: 5px solid var(--magenta);
+    padding: 48px 40px;
+  }
+
+  .footer-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .footer-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--magenta); }
+
+  .footer-sep {
+    color: rgba(255,255,255,0.15);
+    font-size: 11px;
+  }
+
+  .footer-built {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    margin-top: 4px;
+  }
+
+  .footer-built span { color: var(--magenta); opacity: 0.6; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 680px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    header { padding: 52px 20px 56px; }
+    .section { padding: 48px 20px; }
+    .about-body { grid-template-columns: 1fr; }
+    .labs-grid { grid-template-columns: 1fr; }
+    .takeaways-grid { grid-template-columns: 1fr; }
+    .ai-factory { padding: 32px 20px; }
+    .skills-strip { padding: 32px 20px; }
+    footer { padding: 36px 20px; }
+    .factory-step { flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a class="nav-brand" href="#">MIS 432 <span>·</span> AI in Business</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#labs">Labs</a>
+    <a href="#takeaways">Takeaways</a>
+    <a href="https://prof-califf.github.io/ai-in-business/" target="_blank">Course Site ↗</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<header>
+  <div class="hero-inner">
+    <div class="hero-kicker">Student Portfolio &nbsp;·&nbsp; Spring 2026</div>
+    <h1>AI in<br><span class="accent">Business</span><br>Portfolio</h1>
+    <p class="hero-subtitle">MIS 432 · Western Washington University · College of Business and Economics · Spring 2026</p>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">
+      <div class="hero-stat">
+        <span class="hero-stat-num">7</span>
+        <span class="hero-stat-label">Labs Completed</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">7</span>
+        <span class="hero-stat-label">Real Companies</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">20+</span>
+        <span class="hero-stat-label">AI Concepts</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ─── ABOUT ─── -->
+<div class="about-section" id="about">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-kicker">About This Portfolio</div>
+      <h2>Keene Kolbeinsen-Tafaoa</h2>
+    </div>
+    <div class="about-body">
+      <div class="about-text">
+        <p>This portfolio demonstrates my journey learning how to use AI in business-related settings, and shows how I applied that learning through hands-on labs for MIS 432.</p>
+        <p>At the beginning of the course, I did not know much about AI. I was also resistant to it — I'd been told it would eliminate necessary jobs by outperforming humans. But each lab changed my thinking. I was able to demonstrate the real benefits of using AI while also honestly acknowledging its limits: it can't understand the full context of every situation, which is why a human is always needed to make the final decision.</p>
+        <p>What follows is a record of seven companies, seven systems, and one consistent lesson — AI is a tool for augmentation, not replacement.</p>
+      </div>
+      <div class="about-sidebar">
+        <div class="sidebar-label">What I Learned to See</div>
+        <ul class="sidebar-list">
+          <li>How real companies structure AI as an operational pipeline, not a one-off feature</li>
+          <li>Why data quality and pipeline design determine outcomes more than model choice</li>
+          <li>How governance and human oversight are built into production AI systems</li>
+          <li>Where AI creates business value — and where it falls short without human judgment</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── AI FACTORY STRIP ─── -->
+<div class="divider-full">
+  <div class="ai-factory">
+    <div class="factory-step">
+      <div class="factory-node"><div class="f-label">Stage 1</div><div class="f-name">Data</div></div>
+    </div>
+    <div class="factory-arrow">→</div>
+    <div class="factory-step">
+      <div class="factory-node"><div class="f-label">Stage 2</div><div class="f-name">Model</div></div>
+    </div>
+    <div class="factory-arrow">→</div>
+    <div class="factory-step">
+      <div class="factory-node"><div class="f-label">Stage 3</div><div class="f-name">Prediction</div></div>
+    </div>
+    <div class="factory-arrow">→</div>
+    <div class="factory-step">
+      <div class="factory-node"><div class="f-label">Stage 4</div><div class="f-name">Decision</div></div>
+    </div>
+    <div class="factory-arrow">→</div>
+    <div class="factory-step">
+      <div class="factory-node"><div class="f-label">Stage 5</div><div class="f-name">Value</div></div>
+    </div>
+    <div class="factory-arrow">↩</div>
+    <div class="factory-step">
+      <div class="factory-node"><div class="f-label">Loop</div><div class="f-name">Back to Data</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── LABS ─── -->
+<div class="labs-section" id="labs">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-kicker">Seven Labs · Seven Companies</div>
+      <h2>The Work</h2>
+    </div>
+    <div class="labs-grid">
+
+      <!-- LAB 1 -->
+      <div class="lab-card">
+        <div class="card-body">
+          <div class="card-chapter">Lab 01 · Healthcare AI</div>
+          <div class="card-company">
+            <span class="card-emoji">💊</span>
+            <h3>EveryCure</h3>
+          </div>
+          <div class="card-subtitle">AI for Drug Repurposing</div>
+          <p class="card-desc">Built a knowledge graph in Python that links drugs, diseases, and biological pathways to surface hidden treatment candidates — the same approach EveryCure uses to find new uses for existing approved drugs. Learned how graph-based prediction and supervised learning can compress years of pharmaceutical research into automated scoring.</p>
+          <div class="card-tags">
+            <span class="tag">Knowledge Graphs</span>
+            <span class="tag">Supervised Learning</span>
+            <span class="tag">Graph Prediction</span>
+            <span class="tag">AI Factory Model</span>
+            <span class="tag">Human-in-the-Loop</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a class="card-link" href="https://keene-kolbe2.github.io/KK-Lab1-everycure-drug-repurposing-system/" target="_blank" rel="noopener">
+            View Project <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- LAB 2 -->
+      <div class="lab-card">
+        <div class="card-body">
+          <div class="card-chapter">Lab 02 · Experimentation</div>
+          <div class="card-company">
+            <span class="card-emoji">🎬</span>
+            <h3>Netflix</h3>
+          </div>
+          <div class="card-subtitle">A/B Testing &amp; Experimentation</div>
+          <p class="card-desc">Simulated a Netflix-style A/B test — randomizing users, calculating click-through rates, and running a statistical significance test to determine whether a thumbnail variant actually improved engagement. Learned how Netflix separates prediction from decision-making and why that gap is where most AI value gets lost.</p>
+          <div class="card-tags">
+            <span class="tag">A/B Testing</span>
+            <span class="tag">Statistical Significance</span>
+            <span class="tag">Causal Inference</span>
+            <span class="tag">Explore vs. Exploit</span>
+            <span class="tag">Prediction–Decision Gap</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a class="card-link" href="https://keene-kolbe2.github.io/netflix-ab-testing/" target="_blank" rel="noopener">
+            View Project <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- LAB 3 -->
+      <div class="lab-card">
+        <div class="card-body">
+          <div class="card-chapter">Lab 03 · Recommendation Systems</div>
+          <div class="card-company">
+            <span class="card-emoji">🎵</span>
+            <h3>Spotify</h3>
+          </div>
+          <div class="card-subtitle">Recommendation Systems &amp; Personalization</div>
+          <p class="card-desc">Built a collaborative filtering engine that learns user taste from listening history and generates a Wrapped-style personalized summary. Explored how embeddings and two-tower models power Spotify's discovery features, and reproduced the training–serving skew problem that causes silent AI failures in production.</p>
+          <div class="card-tags">
+            <span class="tag">Recommendation Systems</span>
+            <span class="tag">Collaborative Filtering</span>
+            <span class="tag">Embeddings</span>
+            <span class="tag">Personalization</span>
+            <span class="tag">AI Governance</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a class="card-link" href="https://keene-kolbe2.github.io/spotify-recommendation-lab/" target="_blank" rel="noopener">
+            View Project <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- LAB 4 -->
+      <div class="lab-card">
+        <div class="card-body">
+          <div class="card-chapter">Lab 04 · Forecasting</div>
+          <div class="card-company">
+            <span class="card-emoji">🚗</span>
+            <h3>Uber</h3>
+          </div>
+          <div class="card-subtitle">Forecasting &amp; Dynamic Pricing</div>
+          <p class="card-desc">Built a demand forecasting model that detects trend and seasonality in ride-request data, backtests performance against historical actuals, and visualizes prediction intervals. Examined how Uber's entire business model is an AI system — where the algorithm isn't a feature but the operational infrastructure itself.</p>
+          <div class="card-tags">
+            <span class="tag">Time Series Forecasting</span>
+            <span class="tag">Dynamic Pricing</span>
+            <span class="tag">Backtesting</span>
+            <span class="tag">Distribution Shift</span>
+            <span class="tag">Algorithmic Accountability</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a class="card-link" href="https://keene-kolbe2.github.io/forecasting-and-the-uber-factory/" target="_blank" rel="noopener">
+            View Project <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- LAB 5 -->
+      <div class="lab-card">
+        <div class="card-body">
+          <div class="card-chapter">Lab 05 · Deep Learning</div>
+          <div class="card-company">
+            <span class="card-emoji">🚘</span>
+            <h3>Waymo</h3>
+          </div>
+          <div class="card-subtitle">Deep Learning &amp; Computer Vision</div>
+          <p class="card-desc">Ran a real image classifier, analyzed World Model scenarios for edge-case failure, and studied how convolutional neural networks and reinforcement learning combine to let autonomous vehicles perceive and navigate the world. Investigated Waymo's use of simulation and synthetic data to train for the long-tail problem in safety-critical AI.</p>
+          <div class="card-tags">
+            <span class="tag">Computer Vision</span>
+            <span class="tag">Deep Learning</span>
+            <span class="tag">CNNs</span>
+            <span class="tag">Reinforcement Learning</span>
+            <span class="tag">Synthetic Data</span>
+            <span class="tag">World Models</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a class="card-link" href="https://keene-kolbe2.github.io/deep-learning-reinforcement-learning-and-waymo/" target="_blank" rel="noopener">
+            View Project <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- LAB 6 -->
+      <div class="lab-card">
+        <div class="card-body">
+          <div class="card-chapter">Lab 06 · Marketplace AI</div>
+          <div class="card-company">
+            <span class="card-emoji">🏠</span>
+            <h3>Airbnb</h3>
+          </div>
+          <div class="card-subtitle">Marketplace AI &amp; Dynamic Pricing</div>
+          <p class="card-desc">Built a demand-based pricing model for a two-sided marketplace, fit a lead-time distribution, and clustered listings into demand segments to compare pure ML versus hybrid structural approaches. Explored how Airbnb's matching algorithms must simultaneously optimize for guests, hosts, and platform health — and why that tension shapes every algorithmic decision.</p>
+          <div class="card-tags">
+            <span class="tag">Dynamic Pricing</span>
+            <span class="tag">Two-Sided Marketplaces</span>
+            <span class="tag">Cold-Start Problem</span>
+            <span class="tag">Multi-Task Learning</span>
+            <span class="tag">Hybrid ML</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a class="card-link" href="https://keene-kolbe2.github.io/airbnb-lab6-analyze-airbnb-s-AI-systems-from-the-inside/" target="_blank" rel="noopener">
+            View Project <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- LAB 7 -->
+      <div class="lab-card">
+        <div class="card-body">
+          <div class="card-chapter">Lab 07 · Agentic AI</div>
+          <div class="card-company">
+            <span class="card-emoji">🏥</span>
+            <h3>Epic Healthcare</h3>
+          </div>
+          <div class="card-subtitle">Agentic AI &amp; Insurance Advocacy</div>
+          <p class="card-desc">Built a multi-step insurance appeal agent in n8n that pulls a patient's medical chart and policy documentation as tools, drafts a factually grounded appeal letter, and refuses to fabricate clinical or policy language. Designed a five-layer AI governance framework covering data privacy, human oversight, auditing, and sunset criteria — then stress-tested the agent by removing tools and introducing missing policies.</p>
+          <div class="card-tags">
+            <span class="tag">Agentic AI</span>
+            <span class="tag">Prompt Engineering</span>
+            <span class="tag">Human-in-the-Loop</span>
+            <span class="tag">AI Governance</span>
+            <span class="tag">Healthcare AI</span>
+            <span class="tag">Tool Use</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a class="card-link" href="https://keene-kolbe2.github.io/agentic-ai-lab/" target="_blank" rel="noopener">
+            View Project <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /.labs-grid -->
+  </div>
+</div>
+
+<!-- ─── SKILLS STRIP ─── -->
+<div class="skills-strip">
+  <div class="skills-strip-inner">
+    <div class="section-kicker">Concepts Covered Across All Labs</div>
+    <div class="skills-row">
+      <span class="skill-tag">Knowledge Graphs</span>
+      <span class="skill-tag">A/B Testing</span>
+      <span class="skill-tag">Recommendation Systems</span>
+      <span class="skill-tag">Collaborative Filtering</span>
+      <span class="skill-tag">Embeddings</span>
+      <span class="skill-tag">Time Series Forecasting</span>
+      <span class="skill-tag">Dynamic Pricing</span>
+      <span class="skill-tag">Computer Vision</span>
+      <span class="skill-tag">Deep Learning</span>
+      <span class="skill-tag">Reinforcement Learning</span>
+      <span class="skill-tag">Agentic AI</span>
+      <span class="skill-tag">Prompt Engineering</span>
+      <span class="skill-tag">AI Governance</span>
+      <span class="skill-tag">Human-in-the-Loop</span>
+      <span class="skill-tag">Supervised Learning</span>
+      <span class="skill-tag">Two-Sided Marketplaces</span>
+      <span class="skill-tag">NLP</span>
+      <span class="skill-tag">Statistical Significance</span>
+      <span class="skill-tag">Distribution Shift</span>
+      <span class="skill-tag">World Models</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TAKEAWAYS ─── -->
+<div class="takeaways-section" id="takeaways">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-kicker">Big-Picture Insights</div>
+      <h2>Key Takeaways</h2>
+    </div>
+    <div class="takeaways-grid">
+      <div class="takeaway-item">
+        <div class="takeaway-num">01</div>
+        <div class="takeaway-content">
+          <h4>AI Is Only as Good as Its Data Pipeline</h4>
+          <p>Across every company — from Spotify to Waymo — the quality of training data and the integrity of the data pipeline determined outcomes far more than model architecture. Garbage in, garbage out is not a cliché; it is the first engineering constraint of every production AI system.</p>
+        </div>
+      </div>
+      <div class="takeaway-item">
+        <div class="takeaway-num">02</div>
+        <div class="takeaway-content">
+          <h4>Every AI System Needs a Human-in-the-Loop Governance Plan</h4>
+          <p>Whether it's a physician reviewing an ambient documentation summary or a hospital employee auditing an AI-drafted insurance appeal, the human is not optional overhead. They are the accountability layer. Removing them doesn't make the system more efficient — it makes it unaccountable.</p>
+        </div>
+      </div>
+      <div class="takeaway-item">
+        <div class="takeaway-num">03</div>
+        <div class="takeaway-content">
+          <h4>Business Value Comes from Workflow Integration, Not Model Accuracy</h4>
+          <p>A model with 95% accuracy that isn't embedded into a real decision-making workflow creates zero business value. The companies that win with AI — Netflix, Uber, Airbnb — have built their entire operational loop around the model's output. The model is the business, not an add-on to it.</p>
+        </div>
+      </div>
+      <div class="takeaway-item">
+        <div class="takeaway-num">04</div>
+        <div class="takeaway-content">
+          <h4>AI Augments; Context Remains Human</h4>
+          <p>I came into this course skeptical of AI because I feared it would replace human judgment. What I found instead is that AI struggles with context — it can't always know what matters in a specific situation. The real pattern across every lab: AI handles scale and pattern recognition, humans supply context and make final calls.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-name">Keene Kolbeinsen-Tafaoa</div>
+    <div class="footer-links">
+      <a href="mailto:kkolbeinsen.tafaoa@gmail.com">kkolbeinsen.tafaoa@gmail.com</a>
+      <span class="footer-sep">·</span>
+      <a href="http://www.linkedin.com/in/keene-kolbeinsen-tafaoa" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <span class="footer-sep">·</span>
+      <a href="https://prof-califf.github.io/ai-in-business/" target="_blank" rel="noopener">MIS 432 Course Site ↗</a>
+      <span class="footer-sep">·</span>
+      <a href="https://cbe.wwu.edu/dsci/management-information-systems" target="_blank" rel="noopener">MIS @ WWU ↗</a>
+    </div>
+    <div class="footer-built">Built with <span>Claude</span> &nbsp;·&nbsp; MIS 432 &nbsp;·&nbsp; AI in Business &nbsp;·&nbsp; Western Washington University</div>
+  </div>
+</footer>
+
+<script>
+  // Staggered card reveal on scroll
+  const cards = document.querySelectorAll('.lab-card');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        // slight stagger based on grid position
+        setTimeout(() => e.target.classList.add('visible'), (Array.from(cards).indexOf(e.target) % 2) * 80);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  cards.forEach(c => io.observe(c));
+</script>
+
+</body>
+</html>
